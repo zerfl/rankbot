@@ -64,7 +64,7 @@ const parseRanks = async () => {
 
     if (deltaUp && deltaDown) {
       rank.push(
-        `${playlistName}: ${playlist.stats.tier.metadata.name} ${division} (${playlist.stats.rating.value} 🔺${deltaUp}🔻${deltaDown})`
+        `${playlistName}: ${playlist.stats.tier.metadata.name} ${division} (${playlist.stats.rating.value} +${deltaUp} -${deltaDown})`
       );
     } else {
       rank.push(
