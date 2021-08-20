@@ -10,7 +10,7 @@ const messageThrottleMs = 30000;
 const updateThrottleMs = 30000;
 
 const profileurl =
-  `https://api.tracker.gg/api/v2/rocket-league/standard/profile/epic/process.env.${process.env.EPIC_USERNAME}`;
+  `https://api.tracker.gg/api/v2/rocket-league/standard/profile/epic/${process.env.EPIC_USERNAME}`;
 
 const loadRank = async () => {
   let result = {};
