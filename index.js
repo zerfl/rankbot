@@ -86,7 +86,6 @@ const options = {
     password: process.env.TWITCH_OAUTH_TOKEN,
   },
   channels: process.env.TWITCH_CHANNELS.split(","),
-  // channels: ["tyrankbot"],
 };
 
 const client = new tmi.Client(options);
@@ -110,7 +109,6 @@ client.on("message", async (channel, tags, message, self) => {
   }
 });
 
-// fetch one time during init
 (async () => {
   await loadRank();
 })();
