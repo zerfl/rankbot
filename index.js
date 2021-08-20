@@ -7,10 +7,10 @@ let lastRankUpdate = 0;
 let lastJSON = {};
 
 const messageThrottleMs = 30000;
-const updateThrottleMs = 120000;
+const updateThrottleMs = 30000;
 
 const profileurl =
-  "https://api.tracker.gg/api/v2/rocket-league/standard/profile/epic/tyrunk";
+  `https://api.tracker.gg/api/v2/rocket-league/standard/profile/epic/process.env.${process.env.EPIC_USERNAME}`;
 
 const loadRank = async () => {
   let result = {};
@@ -53,11 +53,24 @@ const parseRanks = async () => {
   });
   let rank = [];
 
-  playlists.forEach((element) => {
-		const playlistName = playlistMapper.get(element.attributes.playlistId);
-    rank.push(
-      `${playlistName}: ${element.stats.tier.metadata.name} (${element.stats.rating.value})`
+  playlists.forEach((playlist) => {
+    const playlistName = playlistMapper.get(playlist.attributes.playlistId);
+    const division = playlist.stats.division.metadata.name.replace(
+      "Division",
+      "Div"
     );
+    const deltaUp = playlist.stats.division.metadata.deltaUp;
+    const deltaDown = playlist.stats.division.metadata.deltaDown;
+
+    if (deltaUp && deltaDown) {
+      rank.push(
+        `${playlistName}: ${playlist.stats.tier.metadata.name} ${division} (${playlist.stats.rating.value} 🔺${deltaUp}🔻${deltaDown})`
+      );
+    } else {
+      rank.push(
+        `${playlistName}: ${playlist.stats.tier.metadata.name} ${division} (${playlist.stats.rating.value})`
+      );
+    }
   });
 
   return rank.join(" // ");
@@ -72,8 +85,8 @@ const options = {
     username: process.env.TWITCH_BOT_USERNAME,
     password: process.env.TWITCH_OAUTH_TOKEN,
   },
-  // channels: ["tyrunk"],
-  channels: ["tyrankbot"],
+  channels: process.env.TWITCH_CHANNELS.split(","),
+  // channels: ["tyrankbot"],
 };
 
 const client = new tmi.Client(options);
